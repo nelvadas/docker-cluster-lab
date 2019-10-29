@@ -1,0 +1,32 @@
+variable:
+  region: us-east-1
+  ucp_password:
+    type: prompt
+
+provider:
+  aws:
+    region: ${region}
+    vpc: 
+      id : vpc-0e71d7ae19c9e1234
+      cidr: "10.30.0.0/16"
+    tags:
+      project: Whalecome
+
+cluster:
+  engine:
+    version: ee-stable-19.03
+  ucp:
+    version: docker/ucp:3.2.0
+    username: admin
+    password: ${ucp_password}
+  dtr:
+    version: docker/dtr:2.7.1
+
+resource:
+  aws_instance:
+    managers:
+      quantity: 1
+    registry:
+      quantity: 1
+    workers:
+      quantity: 1
