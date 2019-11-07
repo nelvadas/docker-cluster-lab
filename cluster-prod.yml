@@ -2,13 +2,13 @@ variable:
   region: us-east-1
   ucp_password:
     type: prompt
-
+  ucp2: "--default_node_orchestrator=kubernetes"
 provider:
   aws:
     region: ${region}
     vpc: 
       id : vpc-0e71d7ae19c9e1234
-      cidr: "10.30.0.0/16"
+      cidr: "10.21.0.0/16"
     tags:
       project: Whalecome
 
@@ -19,6 +19,9 @@ cluster:
     version: docker/ucp:3.2.3
     username: admin
     password: ${ucp_password}
+    install_options: ${ucp2}
+    
+
   dtr:
     version: docker/dtr:2.7.1
 

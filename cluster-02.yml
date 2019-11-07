@@ -1,0 +1,62 @@
+variable:
+      domain: "dockerps.io"
+      subdomain: "cluster"
+      region: "us-east-1"
+      email: "elvadas.nono@docker.com"
+      ucp_password:
+        type: prompt
+
+    provider:
+      acme:
+        email: ${email}
+        server_url: https://acme-staging-v02.api.letsencrypt.org/directory
+      aws:
+        region: ${region}
+    cluster:
+      dtr:
+        version: docker/dtr:2.6.5
+      engine:
+        version: ee-stable-18.09.5
+      ucp:
+        username: admin
+        password: ${ucp_password}
+        version: docker/ucp:3.1.6
+    resource:
+      aws_instance:
+        managers:
+          instance_type: t2.xlarge
+          os: Ubuntu 16.04
+          quantity: 3
+        registry:
+          instance_type: t2.xlarge
+          os: Ubuntu 16.04
+          quantity: 3
+        workers:
+          instance_type: t2.xlarge
+          os: Ubuntu 16.04
+          quantity: 3
+      aws_lb:
+        apps:
+          domain: ${subdomain}.${domain}
+          instances:
+          - workers
+          ports:
+          - 80:8080
+          - 443:8443
+        dtr:
+          domain: ${subdomain}.${domain}
+          instances:
+          - registry
+          ports:
+          - 443:443
+        ucp:
+          domain: ${subdomain}.${domain}
+          instances:
+          - managers
+          ports:
+          - 443:443
+          - 6443:6443
+      aws_route53_zone:
+        dns:
+          domain: ${domain}
+          subdomain: ${subdomain}

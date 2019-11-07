@@ -8,7 +8,7 @@ provider:
     region: ${region}
     vpc: 
       id : vpc-0e71d7ae19c9e1234
-      cidr: "10.30.0.0/16"
+      cidr: "10.20.0.0/16"
     tags:
       project: Whalecome
 
